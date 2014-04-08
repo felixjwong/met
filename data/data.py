@@ -12,13 +12,13 @@ from __future__ import print_function
 import sys
 import random
 
-numberofdatafiles = 10
+numberofdatafiles = 100
 for i in range(1,numberofdatafiles+1):
     log = open(str(i)+'.txt', 'w')
     
     # parameters
     init_time = 0
-    end_time = 10
+    end_time = random.randint(720,8640)
 
     heartrate = 130
     var_heartrate = 5

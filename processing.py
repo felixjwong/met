@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 numberofdatafiles = 2
 dataframe = []
 # input graphs from files specified in command line and eliminate spaces
-for inputfile in range(50,50+numberofdatafiles+1):
+for inputfile in range(1,numberofdatafiles+1):
     z = []
-    fopen = open(str(inputfile)+'.txt');
+    fopen = open('./data/'+str(inputfile)+'.txt');
     for line in fopen.readlines():
         z.append([eval(item) for item in line.split('\t')])
     fopen.close()
@@ -31,21 +31,21 @@ for inputfile in range(50,50+numberofdatafiles+1):
 #   ........,[....],......
 # ]
 
-# timestep vs heartrate for (51.txt 52.txt data)
+# timestep vs heartrate for (1.txt 2.txt data)
 a = plt.figure(1)
 dataplot = [[x,y] for [x,y,z,w] in dataframe[0]]
 plt.scatter(*zip(*dataplot),s=2)
 dataplot = [[x,y] for [x,y,z,w] in dataframe[1]]
 plt.scatter(*zip(*dataplot),s=2,marker='o', color='r')
 
-# timestep vs pedo for (51.txt 52.txt data)
+# timestep vs pedo
 b = plt.figure(2)
 dataplot = [[x,z] for [x,y,z,w] in dataframe[0]]
 plt.scatter(*zip(*dataplot),s=2)
 dataplot = [[x,z] for [x,y,z,w] in dataframe[1]]
 plt.scatter(*zip(*dataplot),s=2,marker='o', color='r')
 
-# timestep vs temp for (51.txt 52.txt data)
+# timestep vs temp
 c = plt.figure(3)
 dataplot = [[x,w] for [x,y,z,w] in dataframe[0]]
 plt.scatter(*zip(*dataplot),s=2)
