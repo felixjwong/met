@@ -36,7 +36,8 @@ for i in range(1,numberofdatafiles+1):
     # printing
     for k in range(init_time,end_time):
         heartrate = heartrate+random.randint(-var_heartrate,var_heartrate)
-        pedo = pedo+random.randint(0,var_pedo)
+        rate = random.randint(0,var_pedo)
+        pedo = pedo+rate
         temperature = temperature+random.uniform(-var_temperature,var_temperature)
         if heartrate < hr_low:
             heartrate=hr_low
@@ -46,4 +47,8 @@ for i in range(1,numberofdatafiles+1):
             temperature=t_low
         if temperature > t_high:
             temperature = t_high
-        print (str(k+1)+'\t'+str(heartrate)+'\t'+str(pedo)+'\t'+str(temperature),file=log)
+        print (str(k+1)+'\t'+str(heartrate)+'\t'+str(temperature)+'\t'+str(rate)+'\t'+str(pedo),file=log)
+
+
+
+
