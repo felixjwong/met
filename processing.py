@@ -3,13 +3,13 @@
 # Version 1.0
 # MET project by Chih-Yu (Andy) Liu, Tracy Lu, and Felix Wong
 
-# Usage: 'python processing.py [sparkid]' at the command line
-# Sample Usage: 'python processing.py 51ff66065067545736270187'
+# Usage: 'python processing.py [sparkid] [objective AR] [total time]' at the command line
+# Sample Usage: 'python processing.py 51ff66065067545736270187 10 1500'
 # Output: optimal heart-rate running pace timeseries as array
 #-----------------------------------------------------------------------------#
 
 # packages
-# from __future__ import print_function
+from __future__ import print_function
 from __future__ import division
 import sys
 import os, os.path
@@ -22,9 +22,9 @@ directory = './data/'+sys.argv[1]+'/'
 alldatafiles = [item for item in os.listdir(directory) if '.txt' in item]
 
 # run FANCY PLOTS MODULE?
-fancyplots = 1
+fancyplots = 0
 # run REGRESSION PLOTING MODULE?
-regressionplots = 1
+regressionplots = 0
 
 
 #--------------------------DATA IMPORT MODULE--------------------------------#
@@ -133,14 +133,14 @@ def func1(x, a, b):
     return a*x+b
 params = curve_fit(func1, hr_np, np.log(rr_np))
 [a1,b1]=params[0]
-print params[0]
+#print params[0]
 
 # rr vs ar: returns ar=function(rr)
 def func2(x, a, b):
     return a*x**2+b
 params = curve_fit(func2, rr_np, ar_np)
 [a2,b2]=params[0]
-print params[0]
+#print params[0]
 
 # hr vs ar: returns ar=function(hr)
 # exponential fit done by taking log first
@@ -148,14 +148,14 @@ def func3(x, a, b):
     return a*x+b
 params = curve_fit(func3, hr_np, np.log(ar_np))
 [a3,b3]=params[0]
-print params[0]
+#print params[0]
 
 # ti vs ar: returns ar=function(ti)
 def func4(x, a, b):
     return a*x+b
 params = curve_fit(func4, ti_np, ar_np)
 [a4,b4]=params[0]
-print params[0]
+#print params[0]
 
 
 
@@ -242,7 +242,8 @@ def total_energy(t,h,objA,c1,c2,c3,havg,ravg,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4):
     return c1*abs(objA-LS_energy(t,h,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4))**2+c2*constraint1(h,havg)+c3*constraint2(h,ravg)
 
 # real parameters
-objA = 10
+objA = eval(sys.argv[2])
+total_time = eval(sys.argv[3])
 havg = np.mean(hr_np)
 ravg = np.mean(rr_np)
 
@@ -256,14 +257,16 @@ c3 = 1
 
 #print LS_energy(100,100,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4)
 #print LS_energy(100,200,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4)
-print total_energy(10,100,objA,c1,c2,c3,havg,ravg,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4)
+#print total_energy(10,100,objA,c1,c2,c3,havg,ravg,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4)
+
+log = open(directory+'optimal.tsv', 'w')
 
 # print out solutions to linear equation (heart rate)
-for time in range(1,1000):
+for time in range(1,total_time+1):
     f = lambda h:total_energy(time,h,objA,c1,c2,c3,havg,ravg,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4)
     opth = fsolve(f, 50.0)[0]
     # (optimal heart rate, optimal running rate) pair
-    print opth,np.exp(func1(opth,a1,b1))
+    print (time,"{0:.2f}".format(opth),"{0:.2f}".format(np.exp(func1(opth,a1,b1))), "{0:.2f}".format(LS_energy(time,opth,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4)),file=log)
 
 
 

@@ -20,7 +20,7 @@ for i in range(1,numberofdatafiles+1):
     
     # parameters
     init_time = 0
-    end_time = random.randint(720,8640)
+    end_time = 1500
 
     heartrate = 130
     var_heartrate = 3
