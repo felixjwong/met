@@ -8,7 +8,7 @@
 #       2) retraining
 #       3) pushing out new optimal routine to spark core
 
-# Usage: 'python met.py [spark id] [access code] [objective AP] [total time]' at the command line
+# Usage: 'python met.py [spark id] [access code] [objective AR]' at the command line
 # Sample Usage: 'python met.py 51ff66065067545736270187 be2f2d8cd0cbd6844f3ff7871b86624f7bf1c505 10 1500'
 #-----------------------------------------------------------------------------#
 
@@ -17,6 +17,9 @@ import sys
 import subprocess
 import os, os.path
 import filecmp
+
+# minimal number of training datasets we need
+trainingthreshold = 5
 
 #--------------------------DATA IMPORT MODULE--------------------------------#
 # get new workout data via
@@ -51,7 +54,7 @@ for item in removefiles:
 #--------------------------RETRAINING MODULE--------------------------------#
 
 # call processing.py with all needed cmd line arguments
-p = subprocess.Popen(['python', 'processing.py', sys.argv[1], sys.argv[3], sys.argv[4]], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+p = subprocess.Popen(['python', 'processing.py', sys.argv[1], sys.argv[3]], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 out, err = p.communicate()
 #print out
 
@@ -75,18 +78,19 @@ out, err = p.communicate()
     
 """
 
-fopen = open(directory+'optimal.tsv');
-optimalroutine = []
-for line in fopen.readlines():
-    currentline = line.split(' ',)
-    optimalroutine.append([eval(item) for item in currentline])
-fopen.close()
+if i >= trainingthreshold:
+    fopen = open(directory+'optimal.tsv');
+    optimalroutine = []
+    for line in fopen.readlines():
+        currentline = line.split(' ',)
+        optimalroutine.append([eval(item) for item in currentline])
+    fopen.close()
 
-for item in optimalroutine:
-    argin = str(item[0])+','+str(item[1])+','+str(item[2])+','+str(item[3])
-    #print 'curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/metkey", "-d", "access_token="+sys.argv[2], "-d", "'"+argin+"'"
-    p = subprocess.Popen(['curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/metkey", "-d", "access_token="+sys.argv[2], "-d", "'"+argin+"'"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    out, err = p.communicate()
+    for item in optimalroutine:
+        argin = str(item[0])+','+str(item[1])+','+str(item[2])+','+str(item[3])
+        #print 'curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/metkey", "-d", "access_token="+sys.argv[2], "-d", "'"+argin+"'"
+        p = subprocess.Popen(['curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/metkey", "-d", "access_token="+sys.argv[2], "-d", "'"+argin+"'"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        out, err = p.communicate()
 
 
 

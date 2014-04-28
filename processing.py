@@ -3,7 +3,7 @@
 # Version 1.0
 # MET project by Chih-Yu (Andy) Liu, Tracy Lu, and Felix Wong
 
-# Usage: 'python processing.py [sparkid] [objective AR] [total time]' at the command line
+# Usage: 'python processing.py [sparkid] [objective AR]' at the command line
 # Sample Usage: 'python processing.py 51ff66065067545736270187 10 1500'
 # Output: optimal heart-rate running pace timeseries as array
 #-----------------------------------------------------------------------------#
@@ -22,9 +22,9 @@ directory = './data/'+sys.argv[1]+'/'
 alldatafiles = [item for item in os.listdir(directory) if '.txt' in item]
 
 # run FANCY PLOTS MODULE?
-fancyplots = 0
+fancyplots = 1
 # run REGRESSION PLOTING MODULE?
-regressionplots = 0
+regressionplots = 1
 
 
 #--------------------------DATA IMPORT MODULE--------------------------------#
@@ -68,6 +68,7 @@ if fancyplots == 1:
     plt.title('Distribution of Average Running Rate Workouts')
     plt.xlabel('Average Running Rate During Routine')
     plt.ylabel('Frequency')
+    plt.savefig(directory+'histogram.png', bbox_inches='tight',transparent=True)
 
     # pairwise time series of running factors
     # ti vs hr
@@ -77,6 +78,7 @@ if fancyplots == 1:
     plt.title('Aggregated Data: Time vs. Heart Rate')
     plt.xlabel('Time')
     plt.ylabel('Heart Rate')
+    plt.savefig(directory+'tihr.png', bbox_inches='tight',transparent=True)
 
     # ti vs ar
     p2 = plt.figure(2)
@@ -85,6 +87,7 @@ if fancyplots == 1:
     plt.title('Aggregated Data: Time vs. Average Running Rate')
     plt.xlabel('Time')
     plt.ylabel('Average Running Rate')
+    plt.savefig(directory+'tiar.png', bbox_inches='tight',transparent=True)
 
     # hr vs ar
     p3 = plt.figure(3)
@@ -93,6 +96,7 @@ if fancyplots == 1:
     plt.title('Aggregated Data: Heart Rate vs. Average Running Rate')
     plt.xlabel('Heart Rate')
     plt.ylabel('Average Running Rate')
+    plt.savefig(directory+'hrar.png', bbox_inches='tight',transparent=True)
 
     # rr vs ar
     p4 = plt.figure(4)
@@ -101,6 +105,7 @@ if fancyplots == 1:
     plt.title('Aggregated Data: Instantaneous Running Rate vs. Average Running Rate')
     plt.xlabel('Instantaneous Running Rate')
     plt.ylabel('Average Running Rate')
+    plt.savefig(directory+'rrar.png', bbox_inches='tight',transparent=True)
 
     # hr vs rr
     p5 = plt.figure(5)
@@ -109,6 +114,7 @@ if fancyplots == 1:
     plt.title('Aggregated Data: Heart Rate vs. Instantaneous Running Rate')
     plt.xlabel('Heart Rate')
     plt.ylabel('Instantaneous Running Rate')
+    plt.savefig(directory+'hrrr.png', bbox_inches='tight',transparent=True)
 
     # show plots
     p0.show()
@@ -175,6 +181,7 @@ if regressionplots == 1:
     plt.title('Fitted Data: Heart Rate vs. Instantaneous Running Rate')
     plt.xlabel('Heart Rate')
     plt.ylabel('Instantaneous Running Rate')
+    plt.savefig(directory+'hrrr_fit.png', bbox_inches='tight',transparent=True)
 
     # rr vs ar
     x = np.linspace(min(rr),max(rr),100)
@@ -186,6 +193,7 @@ if regressionplots == 1:
     plt.title('Fitted Data: Instantaneous Running Rate vs. Average Running Rate')
     plt.xlabel('Instantaneous Running Rate')
     plt.ylabel('Average Running Rate')
+    plt.savefig(directory+'rrar_fit.png', bbox_inches='tight',transparent=True)
 
     # hr vs ar
     x = np.linspace(min(hr),max(hr),100)
@@ -197,6 +205,7 @@ if regressionplots == 1:
     plt.title('Fitted Data: Heart Rate vs. Average Running Rate')
     plt.xlabel('Heart Rate')
     plt.ylabel('Average Running Rate')
+    plt.savefig(directory+'hrar_fit.png', bbox_inches='tight',transparent=True)
 
     # ti vs ar
     x = np.linspace(min(ti),max(ti),100)
@@ -208,6 +217,7 @@ if regressionplots == 1:
     plt.title('Fitted Data: Time vs. Average Running Rate')
     plt.xlabel('Time')
     plt.ylabel('Average Running Rate')
+    plt.savefig(directory+'tiar_fit.png', bbox_inches='tight',transparent=True)
 
     # show plots
     plt.close(0)
@@ -243,7 +253,7 @@ def total_energy(t,h,objA,c1,c2,c3,havg,ravg,w1,w2,w3,a1,a2,a3,a4,b1,b2,b3,b4):
 
 # real parameters
 objA = eval(sys.argv[2])
-total_time = eval(sys.argv[3])
+total_time = 1500
 havg = np.mean(hr_np)
 ravg = np.mean(rr_np)
 
