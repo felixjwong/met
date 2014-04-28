@@ -9,10 +9,12 @@
 
 # packages
 from __future__ import print_function
+from __future__ import division
 import sys
 import random
+import math
 
-numberofdatafiles = 100
+numberofdatafiles = 10
 for i in range(1,numberofdatafiles+1):
     log = open(str(i)+'.txt', 'w')
     
@@ -21,33 +23,28 @@ for i in range(1,numberofdatafiles+1):
     end_time = random.randint(720,8640)
 
     heartrate = 130
-    var_heartrate = 5
+    var_heartrate = 3
     hr_high = 200
     hr_low = 50
 
     pedo = 0
-    var_pedo = 7
+    var_pedo = 3
 
-    temperature = 95
-    var_temperature = .1
-    t_high = 110
-    t_low = 80
 
     # printing
     for k in range(init_time,end_time):
         heartrate = heartrate+random.randint(-var_heartrate,var_heartrate)
-        rate = random.randint(0,var_pedo)
-        pedo = pedo+rate
-        temperature = temperature+random.uniform(-var_temperature,var_temperature)
         if heartrate < hr_low:
             heartrate=hr_low
         if heartrate > hr_high:
             heartrate=hr_high
-        if temperature < t_low:
-            temperature=t_low
-        if temperature > t_high:
-            temperature = t_high
-        print (str(k+1)+'\t'+str(heartrate)+'\t'+str(temperature)+'\t'+str(rate)+'\t'+str(pedo),file=log)
+        
+        avgrate = -k/10000+math.exp(heartrate/60)/10+math.exp(heartrate/30)/20+random.uniform(0,1)
+        rate = math.sqrt(math.exp(heartrate/30)/20)+random.uniform(0,1)
+        # rate = random.uniform(0,var_pedo)
+        #           pedo = pedo+rate
+        
+        print (str(k+1)+'\t'+str(heartrate)+'\t'+str("{0:.2f}".format(rate))+'\t'+str("{0:.3f}".format(avgrate)),file=log)
 
 
 
