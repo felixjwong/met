@@ -78,6 +78,11 @@ out, err = p.communicate()
     
 """
 
+#clearArray <- yes
+p = subprocess.Popen(['curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/clearArray", "-d", "access_token="+sys.argv[2], "-d", "'args=yes'"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    out, err = p.communicate()
+
+#updateArray <- all strings for optimal routine
 if i >= trainingthreshold:
     fopen = open(directory+'optimal.tsv');
     optimalroutine = []
@@ -89,7 +94,7 @@ if i >= trainingthreshold:
     for item in optimalroutine:
         argin = str(item[0])+','+str(item[1])+','+str(item[2])+','+str(item[3])
         #print 'curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/metkey", "-d", "access_token="+sys.argv[2], "-d", "'"+argin+"'"
-        p = subprocess.Popen(['curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/metkey", "-d", "access_token="+sys.argv[2], "-d", "'"+argin+"'"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        p = subprocess.Popen(['curl', "'https://api.spark.io/v1/devices/"+sys.argv[1]+"/updateArray", "-d", "access_token="+sys.argv[2], "-d", "'args="+argin+"'"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         out, err = p.communicate()
 
 

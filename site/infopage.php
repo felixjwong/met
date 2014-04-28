@@ -2,6 +2,8 @@
 <html>
 <head>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700 ' rel='stylesheet' type='text/css'>
+<link rel="shortcut icon" href='http://www.hcs.harvard.edu/met/favicon.ico' type="image/x-icon">
+<link rel="icon" href='http://www.hcs.harvard.edu/met/favicon.ico' type="image/x-icon">
 <style>
 html {
     height: 100%;
@@ -49,7 +51,7 @@ img {
 
 <p>&nbsp;
 <p>
-<span style="font-size:20px; top:100px">Your MET is good to go! Here are some of the quantitative data we've taken:</span>
+<span style="font-size:20px; top:100px">Your MET is retrained! Here are some of the quantitative data we've taken about you:</span>
 <p><p>
 <img class="imcl" src="data/<?php echo $_GET["sid"]; ?>/histogram.png">
 <img  class="imcl" src="data/51ff66065067545736270187/hrar_fit.png">
